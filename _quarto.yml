@@ -1,0 +1,31 @@
+project:
+  type: website
+  output-dir: docs
+  resources:
+    - ./_data
+
+website:
+  title: "Benjamin Doran"
+  favicon: _data/images/distortions.png
+  # reader-mode: true
+  sidebar:
+    title: Benjamin Doran
+    logo: _data/images/distortions.png
+    # align: center
+    # pinned: true
+    style: "docked"
+    contents:
+      - href: index.qmd
+        text: About me
+      - publications.qmd
+
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    css: styles.css
+    toc: true
+
+
+

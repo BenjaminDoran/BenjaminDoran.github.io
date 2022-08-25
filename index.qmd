@@ -1,0 +1,60 @@
+---
+title: "Benjamin Doran"
+about:
+    template: trestles
+    image: _data/images/profilepic_NHriver.jpg
+    image-width: 20em
+    image-shape: rounded
+    links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/benjamin-doran/
+    - icon: github
+      text: Github
+      href: https://github.com/BenjaminDoran
+
+---
+## Bio
+
+Specializing in computational biology and machine learning, I am working on understanding the complex relationship between genomes and the emergent structures and behaviors they control.
+
+At a high level this entails asking: what are the fundamental principles of evolution that allow new behaviors and structures to develop in biological organisms? And, how can we apply these principles to better design synthetic biological systems with traits that benefit humanity and sustainable world?
+
+When not torturing my brain with challenging questions, I enjoy hiking, mountain biking, playing board games, photography, and cooking spicy food.
+
+---
+
+## Education
+
+**University of Chicago, PME** | Chicago IL
+
+- PhD of Molecular Engineering | 2020 - 2025 (exp.)
+
+**Harvard University, Harvard Extension School** | Cambridge MA<br/>
+
+- Bachelor of Liberal Arts & Sciences, *cum laude* | 2014 - 2018
+- Professional Graduate Certificate in Data Science
+- Minors: English & Computer Science
+- Honors: Dean's List Academic Achievment Award
+
+
+
+## Publications
+
+**A Treatment-Naïve Cellular Atlas of Pediatric Crohn’s Disease Predicts Disease Severity and Therapeutic Response**
+<br/>MedRxiv | Sep 22, 2021
+<br/>[https://doi.org/10.1101/2021.09.17.21263540](https://doi.org/10.1101/2021.09.17.21263540)
+
+**Single-cell profiling of environmental enteropathy reveals signatures of epithelial remodeling and immune activation in severe disease**
+<br/>BioRxiv | Jan 1, 2021
+<br/>[https://doi.org/10.1101/2021.04.11.439202](https://doi.org/10.1101/2021.04.11.439202)
+
+**Inflammasomes within hyperactive murine dendritic cells stimulate long-lived T cell-mediated anti-tumor immunity**
+<br/>Cell Reports | Nov 17, 2020
+<br/>[https://doi.org/10.1016/j.celrep.2020.108381](https://doi.org/10.1016/j.celrep.2020.108381)
+
+**SARS-CoV-2 receptor ACE2 is an interferon-stimulated gene in human airway epithelial cells and is detected in specific cell subsets across tissues**
+<br/>Cell | May 28, 2020
+<br/>[https://doi.org/10.1016/j.cell.2020.04.035](https://doi.org/10.1016/j.cell.2020.04.035)
+
+[More Publications...](publications.qmd)
