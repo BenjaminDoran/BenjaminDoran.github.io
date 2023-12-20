@@ -2,7 +2,11 @@
 title: Publications
 ---
 
-**A Treatment-Naïve Cellular Atlas of Pediatric Crohn’s Disease Predicts Disease Severity and Therapeutic Response**
+**An evolution-based framework for describing human gut bacteria**
+<br/>BioRxiv | Dec 5, 2023
+<br/>[https://doi.org/10.1101/2023.12.04.569969](https://doi.org/10.1101/2023.12.04.569969)
+
+**Concerted changes in the pediatric single-cell intestinal ecosystem before and after anti-TNF blockade**
 <br/>MedRxiv | Sep 22, 2021
 <br/>[https://doi.org/10.1101/2021.09.17.21263540](https://doi.org/10.1101/2021.09.17.21263540)
 
