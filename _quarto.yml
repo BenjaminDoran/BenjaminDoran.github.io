@@ -23,8 +23,8 @@ website:
 format:
   html:
     theme:
-      dark: cyborg-dark
-      light: cyborg
+      light: flatly
+      dark: darkly
     css: styles.css
     toc: true
 

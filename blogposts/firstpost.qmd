@@ -1,5 +1,0 @@
----
-title: first post
-author: benjamin doran
-date: 2024-12-8
----

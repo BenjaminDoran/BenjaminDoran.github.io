@@ -1,0 +1,419 @@
+---
+title: Setting up a reproducible multi-language data analysis environment
+author: Benjamin Doran
+date: 2024-12-08
+categories:
+    - julia
+    - coding setup
+---
+
+## Overview
+
+There are a lot of ways to set up and code in Julia, but here I'll document the most convienent ways I've found.
+
+I tend to use a Macbook Pro, so this setup example is based on that experience. 
+That said, this tutorial should work for most systems, though windows users may need to adjust some of the initial install instructions.
+Once we get to the Julia specific portions, the instructions should be mostly platform agnostic.
+
+It's also worth pointing out [Modern Julia Workflows](https://modernjuliaworkflows.org/) for another set of opinions on how to work with Julia code.
+
+## Surrounding tools
+
+I use [`juliaup`](https://github.com/JuliaLang/juliaup) to manage my installed julia version, and edit code in the [`vscode`](https://code.visualstudio.com/download) editor with the [`julia extension`](https://code.visualstudio.com/docs/languages/julia) and [`quarto extension`](https://quarto.org/docs/get-started/index.html)
+
+If not installed previously 
+
+* xcode command line tools
+  * run `xcode-select --install` in the terminal to install `git` and other command line tools
+* [Homebrew](https://brew.sh/): a package manager for Mac, helps to install other command line tools
+* [Github SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) for more easily interacting with github
+
+installing these three things will ease coding on mac, not just for Julia but also for Python and R.
+
+## Installing Julia
+
+[`juliaup`](https://github.com/JuliaLang/juliaup) is pretty easy to install from the command line on unix
+
+```bash
+curl -fsSL https://install.julialang.org | sh
+```
+
+Windows has simple install instructions at the link as well.
+
+```bash
+winget install julia -s msstore
+```
+
+The latest release version of julia is then installed with juliaup with
+
+```bash
+juliaup add release
+```
+
+It is usually already added when installing juliaup, but it doesn't hurt to check that the version exists with
+
+```bash
+juliaup status
+```
+
+install vscode [here](https://code.visualstudio.com/download), and in the extensions tab you can install the julia extension following [these instructions](https://code.visualstudio.com/docs/languages/julia) and install quarto using [these instructions](https://quarto.org/docs/get-started/index.html)
+
+These are the basic tools, from here I also install some julia specific tools to better manage my data analysis projects.
+
+## Julia specific setup
+
+Julia's default package manager is excellent.
+For package development it is basically complete, but for data analysis projects it can be made a bit better with the installation of two extra packages.
+
+First is [DrWatson.jl](https://juliadynamics.github.io/DrWatson.jl/dev/) which is a package specifically for data analysis projects. 
+Like [cookiecutter data science](https://github.com/drivendata/cookiecutter-data-science), DrWatson provides a template for reproducible analysis projects.
+And, helps to manage the local and relative filepaths in your projects.
+
+It can be installed from the julia package mode. start julia in the terminal by typing `julia` and hitting enter.
+
+Then enter package mode by pressing `]`
+
+install by typing in 
+
+```
+add DrWatson
+```
+
+exit package mode by pressing the backspace key.
+
+The other package is useful if I am also using Python in my project, or have external commandline tools that are only available in the conda ecosystem.
+The package is [CondaPkg.jl](https://docs.juliahub.com/General/CondaPkg/stable/).
+And it allows installation of these python and conda tools in conjunction with the rest of my Julia code in completely reproducible way. 
+
+Install this package in the same way as DrWatson, by entering the julia package mode and typing in
+```
+add CondaPkg
+```
+
+to use condapkg, we need to first load it
+
+exit package mode and type 
+
+```
+using CondaPkg
+```
+
+then renter package mode and there is a new command `conda ...` that we can use that will add python and conda packages and store config files so that the analysis project knows exactly which versions have been loaded.
+
+For those that this makes sense: It is a wrapper around micromamba and stores the conda environment in a toml file that is readable by Julia and can be reproduced.
+
+```
+# from CondaPkg docs
+pkg> conda status                # see what we have installed
+pkg> conda add python perl       # adds conda packages
+pkg> conda pip_add build         # adds pip packages
+pkg> conda rm perl               # removes conda packages
+pkg> conda run python --version  # runs the given command in the conda environment
+pkg> conda update                # update conda and pip installed packages
+```
+
+To negate the need to manually type in `using CondaPkg` whenever we restart julia, we can add 
+
+```
+@async @eval using CondaPkg
+```
+
+into `~/.julia/config/startup.jl` (the default location julia is installed on unix systems), and CondaPkg will be loaded every time Julia restarts.
+
+## Project specific setup
+
+to use the project template provided by DrWatson, we first load it, then call the `initialize_project()` function.
+
+```
+using DrWatson
+# creates template project "test_proj" in folder `test_proj` as a sub-folder of the folder where we started julia
+initialize_project("test_proj") 
+```
+
+generally I like to have one folder where I store all my coding and analysis projects. I locate this in my home directory.
+
+from the command line I write `mkdir -p ~/projects` to create this folder.
+
+Then I could either start julia from within that folder, and use the previous commands to create a project directory in that folder.
+
+Or, if I started julia from somewhere else, I can tell julia to change the folder it's started in by running `cd("~/projects")`. 
+And then I can run `initialize_project("test_proj")` and get my template project created in the correct spot.
+
+Lets open this folder in vscode.
+
+Either start vscode first, hit `CMD+o` open the folder selector and select your template project. 
+
+Or with the vscode launcher, from the command line type `code ~/projects/test_proj`, which will start vscode with the project open.
+
+To install the command line launcher, start vscode, hit `CMD+SHIFT+p`. In the search bar that pop up type `code`, and click on the `Shell Command: Install 'code' command in PATH` 
+
+With the template project created we should see these directories
+
+```
+test_proj % tree
+.
+├── Manifest.toml
+├── Project.toml
+├── README.md
+├── _research
+├── data
+│   ├── exp_pro
+│   ├── exp_raw
+│   └── sims
+├── notebooks
+├── papers
+├── plots
+├── scripts
+│   └── intro.jl
+├── src
+│   └── dummy_src_file.jl
+└── test
+    └── runtests.jl
+
+12 directories, 6 files
+```
+
+See [DrWatson.jl](https://juliadynamics.github.io/DrWatson.jl/dev/) for more in depth descriptions. 
+But basically, `Project.toml`, and `Manifest.toml` are computer generated configuration files so that as we add packages to our project, they will store which packages and versions we have installed.
+If we use CondaPkg to install a package a new configuration file `CondaPkg.toml` will be created that stores listings of those packages and versions.
+
+As an example lets add CondaPkg to our project environment.
+
+hit ``` CONTROL+` ``` this will open up the terminal within vscode, usually already located at your project folder.
+
+type in `julia`, to start the julia REPL (read; evaluate; print; loop) in the terminal. enter package mode by hitting `]`. 
+
+you should see
+
+```
+(@v1.10) pkg> 
+```
+where in parentheses is the version number of julia you installed. As of January 2024 the latest release version is v1.10. This indicates that you are in the global julia environment. You could install and load packages from here but they would not be reproducible for others or yourself if they clone your project.
+
+Instead, we will activate the project environment. the easiest what is by typing
+
+```
+activate .
+```
+
+where the `.` indicates the current working directory
+
+alternatively type `activate ~/projects/test_proj` to activate the environment from anywhere
+
+you should now see
+
+```
+(test_proj) pkg> 
+```
+
+If we now add CondaPkg or any other julia package they will be installed into the project environment.
+
+type `add CondaPkg` into the prompt and hit enter.
+
+After it is installed, if you open `Project.toml`, you should see 
+
+```
+[deps]
+CondaPkg = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
+DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
+```
+
+as well as some other configurations. 
+
+This is a useful section to look at just to check if the packages you think are installed in your project are in fact installed in the project.
+The specifics of the versions installed are in the `Manifest.toml` file.
+
+For the most part, you won't need to look at these files, but they are how the project is made reproducible.
+
+The `README.md` file in the template project has basic instructions for how the project can be cloned and instantiated on another computer.
+
+## Layout of project
+
+### main important folders
+
+For how I like to work in my projects, the two most important folders are the `data/exp_raw` and `notebooks`.
+
+`data/exp_raw` is where data generally first enters the project. Downloaded datasets, or unprocessed data should go in here. Generally, I like to create a subfolder in here for each dataset, like `data/exp_raw/<dataset_1>` or usually something a bit more memorable. and then all files associated with that dataset, go in that folder.
+
+`notebooks` is ignored by git (version control software) by default in the template project. So usually the first thing I do is comment out this line in the `.gitignore` file
+
+```
+# /notebooks
+```
+
+The reason is that notebooks have a tendency to get large. I usually don't hit the 100mb per file limit on github though so I find it more useful to version control the notebooks.
+
+In this folder I use juptyer notebooks to run analysis in Julia, Python, and R. As a naming scheme I usually do `<incrementing number>_<language>_<description>.ipynb`. for example `00_jl_setupdata.ipynb`.
+
+I tend to prefer using these notebooks because the plots are stored inline with the file. So, if I need to remember some visual, that I didn't think to save at the time, the plot still exists in the notebook. It also means that I don't need to re-run potentially quite long computations, every time I need to go back and remember a plot.
+
+The notebooks also integrate well with [Quarto](https://quarto.org/) which enables generating static HTML pages of each notebook, without needing to rerun every notebook or script for every re-render.
+
+### other folders
+
+`plots` stores plots, I usually create a subfolder in here for each notebook.
+
+`scripts` similar to `notebooks` any set of code that is writing out files or plots, should probably be in here, I use this for scripts that I dispatch to the university SLURM cluster or AWS.
+
+`src` should only contain function declarations, i.e. code that I re-use across notebooks. If I am being fancy and developing custom analysis code that I will be using across projects, I will generate a full julia package and stick it in here as a git submodule. That is more advanced usage than we need to get into at the moment.
+
+`data/exp_pro` and `_research` are both folders I use as output directories. Usually again with a subfolder for each analysis, that might mean multiple sub-folders per notebook. Best practice is probably to use `_research` for more in progress outputs. And then once the output is stabilized, write it to `data/exp_pro`. I tend to use `data/exp_pro` for cleaned data that I will be using again in other notebooks, whereas `_research` I tend to put final results. i.e. the outputs of statistical tests, etc.
+
+`tests` This is meant for testing the functions written in `src`, to ensure correctness. I tend to create a full package in the `src` directory and use the `tests` folder in there. It could also be used to automate reproducing the project, but I have not fully explored that option.
+
+`papers` The intended purpose per DrWatson is for "Scientific papers resulting from the project." I don't use it much till the end.
+
+### additional folder that I create
+
+I will sometimes create some additional folders
+
+`reference` for reference papers or other documents
+
+`docs` autogenerated output from quarto of my notebooks
+
+`wetlab_experiments` protocols and lab notes for experiments I am running related to the analysis project.
+
+Generally I also add these folders to the .gitignore file because they are often more internal notes.
+
+```
+/reference
+/docs
+/wetlab_experiments
+```
+
+## Starting the project
+
+This will depend a lot on what kind of analysis I am doing, I usually add packages as I need them to the project environment.
+
+Usually to start I have some raw, CSV file in `/data/exp_raw/initial_dataset`. 
+
+In the terminal I will start julia and enter the package mode for my project and install some package that I know I will need, this is usually some subset of these packages
+
+```
+julia
+]
+pkg> activate .
+(test_proj) pkg> add CSV, DataFramesMeta # packages for working with tabular data
+(test_proj) pkg> add StatsBase, LinearAlgebra # a bunch of standard statistics and basic linear algebra tooling
+(test_proj) pkg> add SpectralInference # My package working  for working with SVD decompositions of datasets
+(test_proj) pkg> add NewickTree # barebones package for working with newick style phylogenetic trees.
+(test_proj) pkg> add NeighborJoining # My package implementing basic neighborjoining in julia
+(test_proj) pkg> add Muon # julia interface for working with h5ad and h5mu file (useful files for storing matrix data with associated metadata)
+(test_proj) pkg> add HypothesisTests, MultipleTesting # standard statistical tests and multiple testing corrections
+(test_proj) pkg> add StatsPlots # lighter weight plotting package, concise syntax for plotting
+(test_proj) pkg> add CairoMakie # part of the https://docs.makie.org/stable/ ecosystem for plotting. in active development and starting to get more advanced than StatsPlots, can make prettier plots, needs a bit more code
+(test_proj) pkg> add LaTeXStrings # for adding latex captions and labels to plots
+# I use these intermittently less, but are still worth the mention
+(test_proj) pkg> add UMAP # umap dimension reduction of large datasets
+(test_proj) pkg> add Symbolics # symbolic algebra in Julia
+(test_proj) pkg> add MLJ # analog of scikit-learn, enables access to a whole bunch of standard machine learning models
+(test_proj) pkg> add Flux # or Lux # basic deep learning toolkits in Julia
+(test_proj) pkg> add SciML # differential equation solving and simulation
+(test_proj) pkg> add Pluto # reactive notebooks, similar to jupyter notebooks but cells automatically re-compute, It's really useful for creating interactive dashboards for exploring datasets
+```
+
+After installing the packages I want at the moment to start with
+
+```julia-pkg
+add CSV, DataFramesMeta, StatsBase, StatsPlots
+```
+
+So, I will create a notebook 
+
+```
+00_jl_startcleaningdata.ipynb
+```
+
+As the first cell of the notebook I will create a markdown cell and add some metadata
+
+```
+---
+title: Intial analysis cleaning data
+author: Benjamin Doran
+date: today
+---
+```
+
+This will be used by quarto later when rendering as a static document.
+
+Below that I create a code cell with 
+
+```julia
+using DrWatson # load DrWatson from global environment
+@quickactivate projectdir() # this activates the project environment so we can load the correct packages
+# this way of activation works in the notebooks folder and most subfolders of the project.
+# for the activation to work anywhere on the computer explicitly write
+# @quickactivate "test_proj"
+
+# now we can load our packages from the package environment
+using CSV, DataFrames, StatsPlots
+# I like this as a basic plotting theme
+theme(:default, grid=false, tickdir=:out, label=false)
+
+# if we had individual files in `src` that we want to use
+#
+# include(srcdir("helpers.jl")) 
+#
+# usually this include line needs to be rerun if the file is adjusted, 
+# using Revise (https://timholy.github.io/Revise.jl/stable/), 
+# it might be possible to automatically reload the file on each save.
+
+# any other package config code
+ddir = datadir("exp_raw", "initial_dataset")
+```
+
+And then I in the cells below I can write any analysis code I want, to read in, analyze, and plot the dataset.
+
+## [Optional] Set up quarto website of analysis
+
+To render these notebooks as a html pages hosted as a static website.
+
+I add a file `_quarto.yaml` into the `notebooks` folder, with these contents
+
+```yaml
+project:
+  type: website
+  output-dir: ../docs
+
+
+website:
+  title: <title of project seen in browser tab>
+  reader-mode: true
+  sidebar: 
+    title: <title of project seen in side bar of website>,
+    style: "docked"
+    contents:
+      - href: index.qmd # home page
+        text: Home
+      - 00_jl_startcleaningdata.ipynb
+      # - other_analyses_i_have_done.ipynb
+
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    css: styles.css
+    toc: true
+```
+
+I'll also add a local .gitignore file to the `notebooks` folder with lines
+
+```
+/.quarto/
+cpuprof
+```
+
+For the homepage, `notebooks/index.md` I'll usually copy in the contents of `README.md` then edit from there. It should contain a paragraph describing the project at the least.
+
+To locally preview the website open a terminal in the `notebooks` folder either in vscode or externally and enter the command 
+
+```
+quarto preview 
+```
+
+As you edit the notebooks, the website will automatically update with the changes. 
+
+When you're project is finished, the website can be hosted on [GitHub Pages](https://pages.github.com/)
+
+See this [quarto tutorial](https://quarto.org/docs/publishing/github-pages.html) for setting that up.
