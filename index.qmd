@@ -6,6 +6,9 @@ about:
     image-width: 20em
     image-shape: rounded
     links:
+    - icon: bluesky
+      text: Bluesky
+      href: https://bsky.app/profile/benadoran.bsky.social
     - icon: linkedin
       text: LinkedIn
       href: https://www.linkedin.com/in/benjamin-doran/
@@ -16,7 +19,7 @@ about:
 ---
 ## Bio
 
-Specializing in computational biology and machine learning, I am working on understanding the complex relationship between genomes and the emergent structures and behaviors they control.
+Specializing in computational biology and machine learning, I am working on understanding the complex relationships that allow living things to adapt to new environments, form emergent structures and behaviors, and behave (semi) intellegently.
 
 At a high level this entails asking: what are the fundamental principles of evolution that allow new behaviors and structures to develop in biological organisms? And, how can we apply these principles to better design synthetic biological systems with traits that benefit humanity and sustainable world?
 
@@ -41,20 +44,12 @@ When not torturing my brain with challenging questions, I enjoy hiking, mountain
 
 ## Publications
 
-**A Treatment-Naïve Cellular Atlas of Pediatric Crohn’s Disease Predicts Disease Severity and Therapeutic Response**
-<br/>MedRxiv | Sep 22, 2021
-<br/>[https://doi.org/10.1101/2021.09.17.21263540](https://doi.org/10.1101/2021.09.17.21263540)
+**An evolution-based framework for describing human gut bacteria**
+<br/>BioRxiv | Dec 5, 2023
+<br/>[https://doi.org/10.1101/2023.12.04.569969](https://doi.org/10.1101/2023.12.04.569969)
 
-**Single-cell profiling of environmental enteropathy reveals signatures of epithelial remodeling and immune activation in severe disease**
-<br/>BioRxiv | Jan 1, 2021
-<br/>[https://doi.org/10.1101/2021.04.11.439202](https://doi.org/10.1101/2021.04.11.439202)
-
-**Inflammasomes within hyperactive murine dendritic cells stimulate long-lived T cell-mediated anti-tumor immunity**
-<br/>Cell Reports | Nov 17, 2020
-<br/>[https://doi.org/10.1016/j.celrep.2020.108381](https://doi.org/10.1016/j.celrep.2020.108381)
-
-**SARS-CoV-2 receptor ACE2 is an interferon-stimulated gene in human airway epithelial cells and is detected in specific cell subsets across tissues**
-<br/>Cell | May 28, 2020
-<br/>[https://doi.org/10.1016/j.cell.2020.04.035](https://doi.org/10.1016/j.cell.2020.04.035)
+**Concerted changes in the pediatric single-cell intestinal ecosystem before and after anti-TNF blockade**
+<br/>eLife | Sep 22, 2023
+<br/>[https://doi.org/10.7554/eLife.91792.1](https://doi.org/10.7554/eLife.91792.1)
 
 [More Publications...](publications.qmd)

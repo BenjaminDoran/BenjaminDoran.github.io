@@ -7,17 +7,16 @@ title: Publications
 <br/>[https://doi.org/10.1101/2023.12.04.569969](https://doi.org/10.1101/2023.12.04.569969)
 
 **Concerted changes in the pediatric single-cell intestinal ecosystem before and after anti-TNF blockade**
-<br/>MedRxiv | Sep 22, 2021
-<br/>[https://doi.org/10.1101/2021.09.17.21263540](https://doi.org/10.1101/2021.09.17.21263540)
+<br/>eLife | Sep 22, 2023
+<br/>[https://doi.org/10.7554/eLife.91792.1](https://doi.org/10.7554/eLife.91792.1)
 
 **Single-cell profiling of environmental enteropathy reveals signatures of epithelial remodeling and immune activation in severe disease**
-<br/>BioRxiv | Jan 1, 2021
-<br/>[https://doi.org/10.1101/2021.04.11.439202](https://doi.org/10.1101/2021.04.11.439202)
+<br/>Science Translational Medicine | Jan 1, 2022
+<br/>[https://doi.org/10.1126/scitranslmed.abi8633](https://doi.org/10.1126/scitranslmed.abi8633)
 
 **Inflammasomes within hyperactive murine dendritic cells stimulate long-lived T cell-mediated anti-tumor immunity**
 <br/>Cell Reports | Nov 17, 2020
 <br/>[https://doi.org/10.1016/j.celrep.2020.108381](https://doi.org/10.1016/j.celrep.2020.108381)
-
 
 **SARS-CoV-2 receptor ACE2 is an interferon-stimulated gene in human airway epithelial cells and is detected in specific cell subsets across tissues**
 <br/>Cell | May 28, 2020

@@ -8,22 +8,23 @@ website:
   title: "Benjamin Doran"
   favicon: _data/images/distortions.png
   # reader-mode: true
-  sidebar:
+  navbar:
     title: Benjamin Doran
     logo: _data/images/distortions.png
     # align: center
     # pinned: true
-    style: "docked"
-    contents:
+    # style: "docked"
+    left:
       - href: index.qmd
         text: About me
       - publications.qmd
+      - blog.qmd
 
 format:
   html:
     theme:
-      light: flatly
-      dark: darkly
+      dark: cyborg-dark
+      light: cyborg
     css: styles.css
     toc: true
 
