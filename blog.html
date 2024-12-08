@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Benjamin Doran</title>
+<title>Benjamin Doran – Posts</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -31,9 +31,12 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./_data/images/distortions.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
@@ -68,7 +71,65 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
 
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -94,7 +155,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">About me</span></a>
   </li>  
   <li class="nav-item">
@@ -102,7 +163,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link active" href="./blog.html" aria-current="page"> 
 <span class="menu-text">Posts</span></a>
   </li>  
 </ul>
@@ -114,80 +175,106 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-  <ul>
-  <li><a href="#bio" id="toc-bio" class="nav-link active" data-scroll-target="#bio">Bio</a></li>
-  <li><a href="#education" id="toc-education" class="nav-link" data-scroll-target="#education">Education</a></li>
-  <li><a href="#publications" id="toc-publications" class="nav-link" data-scroll-target="#publications">Publications</a></li>
-  </ul>
-</nav>
-    </div>
+        
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="coding setup">coding setup <span class="quarto-category-count">(1)</span></div><div class="category" data-category="julia">julia <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
-<div class="quarto-about-trestles">
-  <div class="about-entity">
-    <img src="_data/images/profilepic_NHriver.jpg" class="about-image
-  rounded " style="width: 20em;">
+<main class="content column-page-left" id="quarto-document-content">
+
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Benjamin Doran</h1>
+<h1 class="title">Posts</h1>
 </div>
-<div class="quarto-title-meta">
+
+
+
+<div class="quarto-title-meta column-page-left">
+
+    
+  
+    
   </div>
+  
+
+
 </header>
-    <div class="about-links">
-  <a href="https://bsky.app/profile/benadoran.bsky.social" class="about-link" rel="" target="">
-    <i class="bi bi-bluesky"></i>
-     <span class="about-link-text">Bluesky</span>
-  </a>
-  <a href="https://www.linkedin.com/in/benjamin-doran/" class="about-link" rel="" target="">
-    <i class="bi bi-linkedin"></i>
-     <span class="about-link-text">LinkedIn</span>
-  </a>
-  <a href="https://github.com/BenjaminDoran" class="about-link" rel="" target="">
-    <i class="bi bi-github"></i>
-     <span class="about-link-text">Github</span>
-  </a>
-</div>
+
+
+
+
+
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-title" data-direction="asc">
+          Title
+        </option>
+         <option value="listing-date-sort" data-direction="asc">
+          Date - Oldest
+        </option>
+         <option value="listing-date-sort" data-direction="desc">
+          Date - Newest
+        </option>
+         <option value="listing-author" data-direction="asc">
+          Author
+        </option>
+     </select>
   </div>
-  <div class="about-contents"><main class="content" id="quarto-document-content">
-
-<section id="bio" class="level2">
-<h2 data-anchor-id="bio">Bio</h2>
-<p>Specializing in computational biology and machine learning, I am working on understanding the complex relationships that allow living things to adapt to new environments, form emergent structures and behaviors, and behave (semi) intellegently.</p>
-<p>At a high level this entails asking: what are the fundamental principles of evolution that allow new behaviors and structures to develop in biological organisms? And, how can we apply these principles to better design synthetic biological systems with traits that benefit humanity and sustainable world?</p>
-<p>When not torturing my brain with challenging questions, I enjoy hiking, mountain biking, playing board games, photography, and cooking spicy food.</p>
-<hr>
-</section>
-<section id="education" class="level2">
-<h2 data-anchor-id="education">Education</h2>
-<p><strong>University of Chicago, PME</strong> | Chicago IL</p>
-<ul>
-<li>PhD of Molecular Engineering | 2020 - 2025 (exp.)</li>
-</ul>
-<p><strong>Harvard University, Harvard Extension School</strong> | Cambridge MA<br></p>
-<ul>
-<li>Bachelor of Liberal Arts &amp; Sciences, <em>cum laude</em> | 2014 - 2018</li>
-<li>Professional Graduate Certificate in Data Science</li>
-<li>Minors: English &amp; Computer Science</li>
-<li>Honors: Dean’s List Academic Achievment Award</li>
-</ul>
-</section>
-<section id="publications" class="level2">
-<h2 data-anchor-id="publications">Publications</h2>
-<p><strong>An evolution-based framework for describing human gut bacteria</strong> <br>BioRxiv | Dec 5, 2023 <br><a href="https://doi.org/10.1101/2023.12.04.569969">https://doi.org/10.1101/2023.12.04.569969</a></p>
-<p><strong>Concerted changes in the pediatric single-cell intestinal ecosystem before and after anti-TNF blockade</strong> <br>eLife | Sep 22, 2023 <br><a href="https://doi.org/10.7554/eLife.91792.1">https://doi.org/10.7554/eLife.91792.1</a></p>
-<p><a href="./publications.html">More Publications…</a></p>
-
-
-</section>
-</main></div>
+    <div class="input-group input-group-sm quarto-listing-filter">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="search form-control" placeholder="Filter">
+    </div>
 </div>
- <!-- /main -->
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="julia,coding setup" data-listing-date-sort="1733637600000" data-listing-file-modified-sort="1733645900541" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2588">
+<div class="thumbnail">
+<p><a href="./blogposts/001_setting-up-an-analysis-project.html" class="no-external"></a></p><a href="./blogposts/001_setting-up-an-analysis-project.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./blogposts/001_setting-up-an-analysis-project.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./blogposts/001_setting-up-an-analysis-project.html" class="no-external">Setting up a reproducible multi-language data analysis environment</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./blogposts/001_setting-up-an-analysis-project.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('julia'); return false;">
+julia
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('coding setup'); return false;">
+coding setup
+</div>
+</div>
+<div class="listing-description">
+<a href="./blogposts/001_setting-up-an-analysis-project.html" class="no-external">There are a lot of ways to set up and code in Julia, but here I’ll document the most convienent ways I’ve found.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./blogposts/001_setting-up-an-analysis-project.html" class="no-external">
+<div class="listing-date">
+Dec 8, 2024
+</div>
+<div class="listing-author">
+Benjamin Doran
+</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -352,6 +439,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   } else {
     toggleColorMode(false);
   }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
   const isCodeAnnotation = (el) => {
     for (const clz of el.classList) {
       if (clz.startsWith('code-annotation-')) {                     
