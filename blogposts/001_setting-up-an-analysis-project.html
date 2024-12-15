@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Benjamin Doran">
-<meta name="dcterms.date" content="2024-12-08">
+<meta name="dcterms.date" content="2024-12-15">
 
-<title>Benjamin Doran – Setting up a reproducible multi-language data analysis environment</title>
+<title>Benjamin Doran – Setting up a reproducible Julia, Python, R data analysis projects</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -160,7 +160,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#surrounding-tools" id="toc-surrounding-tools" class="nav-link" data-scroll-target="#surrounding-tools">Surrounding tools</a></li>
+  <li><a href="#semi-optional-surrounding-tools" id="toc-semi-optional-surrounding-tools" class="nav-link" data-scroll-target="#semi-optional-surrounding-tools">[semi-optional] Surrounding tools</a></li>
   <li><a href="#installing-julia" id="toc-installing-julia" class="nav-link" data-scroll-target="#installing-julia">Installing Julia</a></li>
   <li><a href="#julia-specific-setup" id="toc-julia-specific-setup" class="nav-link" data-scroll-target="#julia-specific-setup">Julia specific setup</a></li>
   <li><a href="#project-specific-setup" id="toc-project-specific-setup" class="nav-link" data-scroll-target="#project-specific-setup">Project specific setup</a></li>
@@ -172,6 +172,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#starting-the-project" id="toc-starting-the-project" class="nav-link" data-scroll-target="#starting-the-project">Starting the project</a></li>
   <li><a href="#optional-set-up-quarto-website-of-analysis" id="toc-optional-set-up-quarto-website-of-analysis" class="nav-link" data-scroll-target="#optional-set-up-quarto-website-of-analysis">[Optional] Set up quarto website of analysis</a></li>
+  <li><a href="#other-tips" id="toc-other-tips" class="nav-link" data-scroll-target="#other-tips">Other tips</a></li>
   </ul>
 </nav>
     </div>
@@ -180,7 +181,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Setting up a reproducible multi-language data analysis environment</h1>
+<h1 class="title">Setting up a reproducible Julia, Python, R data analysis projects</h1>
   <div class="quarto-categories">
     <div class="quarto-category">julia</div>
     <div class="quarto-category">coding setup</div>
@@ -201,7 +202,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 8, 2024</p>
+      <p class="date">December 15, 2024</p>
     </div>
   </div>
   
@@ -215,26 +216,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>There are a lot of ways to set up and code in Julia, but here I’ll document the most convienent ways I’ve found.</p>
-<p>I tend to use a Macbook Pro, so this setup example is based on that experience. That said, this tutorial should work for most systems, though windows users may need to adjust some of the initial install instructions. Once we get to the Julia specific portions, the instructions should be mostly platform agnostic.</p>
+<p>I’ve found that one of the hardest aspects for people trying to start with scientific data analysis, is learning how to setup and organize an analysis project. This leads to problems where analysis can’t be reproduced – even by the same person – as well as headaches like missing data, or times a tool can’t be installed because of missing dependencies and conflicts with existing installations.</p>
+<p>So, this document is meant as a record of the most convenient ways I’ve found set up a reproducible data analysis projects. The primary focus will be on creating these projects including the <a href="https://julialang.org">julia</a> programming language, because that is the programming language I primarily use and this is listing my experience. As well as because there are already solid resources for when people are primarily using <a href="https://cookiecutter-data-science.drivendata.org/why/">python</a> and <a href="https://olivia-angelin-bonnet.netlify.app/blog/2024-08-20-setting-up-r-project/">R</a>. (those links are just examples, there are plenty more just a google search away.)</p>
+<p>So, how do I do set up an analysis project for Julia?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Caveat:</strong> I tend to use a Macbook Pro, so this setup example is based on that experience. That said, this tutorial should work for most systems, though windows users may need to adjust some of the initial install instructions. Once we get to the Julia specific portions, the instructions should be mostly platform agnostic.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>It’s also worth pointing out <a href="https://modernjuliaworkflows.org/">Modern Julia Workflows</a> for another set of opinions on how to work with Julia code.</p>
+</div>
+</div>
 </section>
-<section id="surrounding-tools" class="level2">
-<h2 class="anchored" data-anchor-id="surrounding-tools">Surrounding tools</h2>
-<p>I use <a href="https://github.com/JuliaLang/juliaup"><code>juliaup</code></a> to manage my installed julia version, and edit code in the <a href="https://code.visualstudio.com/download"><code>vscode</code></a> editor with the <a href="https://code.visualstudio.com/docs/languages/julia"><code>julia extension</code></a> and <a href="https://quarto.org/docs/get-started/index.html"><code>quarto extension</code></a></p>
-<p>If not installed previously</p>
+<section id="semi-optional-surrounding-tools" class="level2">
+<h2 class="anchored" data-anchor-id="semi-optional-surrounding-tools">[semi-optional] Surrounding tools</h2>
+<p>Python and R are scripting languages which aim to be relatively easy and user friendly. Yet, as scripting languages they are relient on low-level compiled C and C++ code for performance. And, one of the common issues I see new coders face as they try to install scientific packages is not having compilers installed to handle the C and C++ code the python and R packages are using.</p>
+<p>There are also a bunch of other basic tools that your editor may assume you have installed. So on Mac I usually recommend installing these programs to get the basic tools and compilers that are likely depended on by your editor and other packages.</p>
 <ul>
 <li>xcode command line tools
 <ul>
-<li>run <code>xcode-select --install</code> in the terminal to install <code>git</code> and other command line tools</li>
+<li>run <code>xcode-select --install</code> in the terminal to install <code>git</code> and other basic command line tools</li>
 </ul></li>
-<li><a href="https://brew.sh/">Homebrew</a>: a package manager for Mac, helps to install other command line tools</li>
-<li><a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github SSH key</a> for more easily interacting with github</li>
+<li><a href="https://brew.sh/">Homebrew</a>: a package manager for Mac, helps to install additional command line tools as needed</li>
+<li><a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Github SSH key</a> for interacting with github (where many code packages are stored) without needing to type in a password every time.</li>
 </ul>
-<p>installing these three things will ease coding on mac, not just for Julia but also for Python and R.</p>
+<p>Installing these three things will ease coding on mac, not just for Julia but also for Python and R.</p>
 </section>
 <section id="installing-julia" class="level2">
 <h2 class="anchored" data-anchor-id="installing-julia">Installing Julia</h2>
+<p>For julia, the recommended installation method is from <a href="https://github.com/JuliaLang/juliaup"><code>juliaup</code></a>. This allows easy installation of multiple julia versions and upgrading from one version to the next.</p>
 <p><a href="https://github.com/JuliaLang/juliaup"><code>juliaup</code></a> is pretty easy to install from the command line on unix</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://install.julialang.org <span class="kw">|</span> <span class="fu">sh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Windows has simple install instructions at the link as well.</p>
@@ -243,7 +271,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">juliaup</span> add release</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>It is usually already added when installing juliaup, but it doesn’t hurt to check that the version exists with</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">juliaup</span> status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>install vscode <a href="https://code.visualstudio.com/download">here</a>, and in the extensions tab you can install the julia extension following <a href="https://code.visualstudio.com/docs/languages/julia">these instructions</a> and install quarto using <a href="https://quarto.org/docs/get-started/index.html">these instructions</a></p>
+<p>To edit code, I use the <a href="https://code.visualstudio.com/download"><code>vscode</code></a> editor with the <a href="https://code.visualstudio.com/docs/languages/julia"><code>julia extension</code></a> and <a href="https://quarto.org/docs/get-started/index.html"><code>quarto extension</code></a>.</p>
+<p>Install vscode <a href="https://code.visualstudio.com/download">here</a>, and in the extensions tab you can install the julia extension following <a href="https://code.visualstudio.com/docs/languages/julia">these instructions</a> and install quarto using <a href="https://quarto.org/docs/get-started/index.html">these instructions</a></p>
 <p>These are the basic tools, from here I also install some julia specific tools to better manage my data analysis projects.</p>
 </section>
 <section id="julia-specific-setup" class="level2">
@@ -253,34 +282,83 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>It can be installed from the julia package mode. start julia in the terminal by typing <code>julia</code> and hitting enter.</p>
 <p>Then enter package mode by pressing <code>]</code></p>
 <p>install by typing in</p>
-<pre><code>add DrWatson</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">add</span> DrWatson</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>exit package mode by pressing the backspace key.</p>
 <p>The other package is useful if I am also using Python in my project, or have external commandline tools that are only available in the conda ecosystem. The package is <a href="https://docs.juliahub.com/General/CondaPkg/stable/">CondaPkg.jl</a>. And it allows installation of these python and conda tools in conjunction with the rest of my Julia code in completely reproducible way.</p>
 <p>Install this package in the same way as DrWatson, by entering the julia package mode and typing in</p>
-<pre><code>add CondaPkg</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">add</span> CondaPkg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>to use condapkg, we need to first load it</p>
 <p>exit package mode and type</p>
-<pre><code>using CondaPkg</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CondaPkg</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>then renter package mode and there is a new command <code>conda ...</code> that we can use that will add python and conda packages and store config files so that the analysis project knows exactly which versions have been loaded.</p>
-<p>For those that this makes sense: It is a wrapper around micromamba and stores the conda environment in a toml file that is readable by Julia and can be reproduced.</p>
-<pre><code># from CondaPkg docs
-pkg&gt; conda status                # see what we have installed
-pkg&gt; conda add python perl       # adds conda packages
-pkg&gt; conda pip_add build         # adds pip packages
-pkg&gt; conda rm perl               # removes conda packages
-pkg&gt; conda run python --version  # runs the given command in the conda environment
-pkg&gt; conda update                # update conda and pip installed packages</code></pre>
+<p>For those that this makes sense: It is a wrapper around micromamba and stores the environment requirements in a toml file that is readable by Julia and can be reproduced.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># from CondaPkg docs</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>pkg<span class="op">&gt;</span> conda status                <span class="co"># see what we have installed</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>pkg<span class="op">&gt;</span> conda add python perl       <span class="co"># adds conda packages</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>pkg<span class="op">&gt;</span> conda pip_add build         <span class="co"># adds pip packages</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>pkg<span class="op">&gt;</span> conda rm perl               <span class="co"># removes conda packages</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>pkg<span class="op">&gt;</span> conda run python <span class="op">--</span>version  <span class="co"># runs the given command in the conda environment</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>pkg<span class="op">&gt;</span> conda update                <span class="co"># update conda and pip installed packages</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To negate the need to manually type in <code>using CondaPkg</code> whenever we restart julia, we can add</p>
-<pre><code>@async @eval using CondaPkg</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="pp">@async</span> <span class="pp">@eval</span> <span class="im">using</span> <span class="bu">CondaPkg</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>into <code>~/.julia/config/startup.jl</code> (the default location julia is installed on unix systems), and CondaPkg will be loaded every time Julia restarts.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To make sure the specific python and R versions as installed in the conda environment are accessible from vscode, we need to activate the environment before opening vscode.</p>
+<p>from the command line:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> path/to/project</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">micromamba</span> activate ./.CondaPkg/env</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="ex">code</span> .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p>also I’ve had bad luck with installing all the R dependencies directly from conda. So I will usually only add</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pkg<span class="op">&gt;</span> conda add r<span class="op">-</span>essentials r<span class="op">-</span>irkernel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>then create a seperate script that installs the rest of the R libraries I need either directly from R</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">RScript</span> scripts/install_dependencies.R</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>where for example the <code>scripts/install_dependencies.R</code> is</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repos=</span><span class="fu">c</span>(<span class="at">CRAN=</span><span class="st">"https://repo.miserver.it.umich.edu/cran"</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"BiocManager"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"treeio"</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"ggtree"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Or from julia, if I am going to be calling R from julia a lot. For example:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="bu">CondaPkg;</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>CondaPkg.<span class="fu">activate!</span>(<span class="cn">ENV</span>);</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">RCall</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>R<span class="st">"""</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="st">options(repos=c(CRAN="https://repo.miserver.it.umich.edu/cran"))</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="st">install.packages("tidyverse")</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="st">install.packages("ggplot2")</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="st">if (!require("BiocManager", quietly = TRUE)) {</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="st">    install.packages("BiocManager")</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="st">BiocManager::install("treeio")</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="st">BiocManager::install("ggtree")</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="project-specific-setup" class="level2">
 <h2 class="anchored" data-anchor-id="project-specific-setup">Project specific setup</h2>
 <p>to use the project template provided by DrWatson, we first load it, then call the <code>initialize_project()</code> function.</p>
-<pre><code>using DrWatson
-# creates template project "test_proj" in folder `test_proj` as a sub-folder of the folder where we started julia
-initialize_project("test_proj") </code></pre>
-<p>generally I like to have one folder where I store all my coding and analysis projects. I locate this in my home directory.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DrWatson</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># creates template project "test_proj" in folder `test_proj` as a sub-folder of the folder where we started julia</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">initialize_project</span>(<span class="st">"test_proj"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Generally I like to have one folder where I store all my coding and analysis projects. I locate this in my home directory.</p>
 <p>from the command line I write <code>mkdir -p ~/projects</code> to create this folder.</p>
 <p>Then I could either start julia from within that folder, and use the previous commands to create a project directory in that folder.</p>
 <p>Or, if I started julia from somewhere else, I can tell julia to change the folder it’s started in by running <code>cd("~/projects")</code>. And then I can run <code>initialize_project("test_proj")</code> and get my template project created in the correct spot.</p>
@@ -312,19 +390,19 @@ initialize_project("test_proj") </code></pre>
 12 directories, 6 files</code></pre>
 <p>See <a href="https://juliadynamics.github.io/DrWatson.jl/dev/">DrWatson.jl</a> for more in depth descriptions. But basically, <code>Project.toml</code>, and <code>Manifest.toml</code> are computer generated configuration files so that as we add packages to our project, they will store which packages and versions we have installed. If we use CondaPkg to install a package a new configuration file <code>CondaPkg.toml</code> will be created that stores listings of those packages and versions.</p>
 <p>As an example lets add CondaPkg to our project environment.</p>
-<p>hit <code>CONTROL+`</code> this will open up the terminal within vscode, usually already located at your project folder.</p>
-<p>type in <code>julia</code>, to start the julia REPL (read; evaluate; print; loop) in the terminal. enter package mode by hitting <code>]</code>.</p>
-<p>you should see</p>
-<pre><code>(@v1.10) pkg&gt; </code></pre>
-<p>where in parentheses is the version number of julia you installed. As of January 2024 the latest release version is v1.10. This indicates that you are in the global julia environment. You could install and load packages from here but they would not be reproducible for others or yourself if they clone your project.</p>
+<p>Hit <code>CONTROL+`</code> this will open up the terminal within vscode, usually already located at your project folder.</p>
+<p>Type in <code>julia</code>, to start the julia REPL (read; evaluate; print; loop) in the terminal. enter package mode by hitting <code>]</code>.</p>
+<p>You should see</p>
+<pre><code>(@v1.11) pkg&gt; </code></pre>
+<p>where in parentheses is the version number of julia you installed. As of December 2024 the latest release version is v1.11. This indicates that you are in the global julia environment. You could install and load packages from here but they would not be reproducible for others or yourself if they clone your project.</p>
 <p>Instead, we will activate the project environment. the easiest what is by typing</p>
-<pre><code>activate .</code></pre>
-<p>where the <code>.</code> indicates the current working directory</p>
-<p>alternatively type <code>activate ~/projects/test_proj</code> to activate the environment from anywhere</p>
-<p>you should now see</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>activate .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>where the <code>.</code> indicates the current working directory.</p>
+<p>Alternatively type <code>activate ~/projects/test_proj</code> to activate the environment from anywhere.</p>
+<p>You should now see</p>
 <pre><code>(test_proj) pkg&gt; </code></pre>
 <p>If we now add CondaPkg or any other julia package they will be installed into the project environment.</p>
-<p>type <code>add CondaPkg</code> into the prompt and hit enter.</p>
+<p>Type <code>add CondaPkg</code> into the prompt and hit enter.</p>
 <p>After it is installed, if you open <code>Project.toml</code>, you should see</p>
 <pre><code>[deps]
 CondaPkg = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
@@ -373,26 +451,27 @@ DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"</code></pre>
 <p>This will depend a lot on what kind of analysis I am doing, I usually add packages as I need them to the project environment.</p>
 <p>Usually to start I have some raw, CSV file in <code>/data/exp_raw/initial_dataset</code>.</p>
 <p>In the terminal I will start julia and enter the package mode for my project and install some package that I know I will need, this is usually some subset of these packages</p>
-<pre><code>julia
-]
-pkg&gt; activate .
-(test_proj) pkg&gt; add CSV, DataFramesMeta # packages for working with tabular data
-(test_proj) pkg&gt; add StatsBase, LinearAlgebra # a bunch of standard statistics and basic linear algebra tooling
-(test_proj) pkg&gt; add SpectralInference # My package working  for working with SVD decompositions of datasets
-(test_proj) pkg&gt; add NewickTree # barebones package for working with newick style phylogenetic trees.
-(test_proj) pkg&gt; add NeighborJoining # My package implementing basic neighborjoining in julia
-(test_proj) pkg&gt; add Muon # julia interface for working with h5ad and h5mu file (useful files for storing matrix data with associated metadata)
-(test_proj) pkg&gt; add HypothesisTests, MultipleTesting # standard statistical tests and multiple testing corrections
-(test_proj) pkg&gt; add StatsPlots # lighter weight plotting package, concise syntax for plotting
-(test_proj) pkg&gt; add CairoMakie # part of the https://docs.makie.org/stable/ ecosystem for plotting. in active development and starting to get more advanced than StatsPlots, can make prettier plots, needs a bit more code
-(test_proj) pkg&gt; add LaTeXStrings # for adding latex captions and labels to plots
-# I use these intermittently less, but are still worth the mention
-(test_proj) pkg&gt; add UMAP # umap dimension reduction of large datasets
-(test_proj) pkg&gt; add Symbolics # symbolic algebra in Julia
-(test_proj) pkg&gt; add MLJ # analog of scikit-learn, enables access to a whole bunch of standard machine learning models
-(test_proj) pkg&gt; add Flux # or Lux # basic deep learning toolkits in Julia
-(test_proj) pkg&gt; add SciML # differential equation solving and simulation
-(test_proj) pkg&gt; add Pluto # reactive notebooks, similar to jupyter notebooks but cells automatically re-compute, It's really useful for creating interactive dashboards for exploring datasets</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>julia</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>pkg<span class="op">&gt;</span> activate .</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add CSV, DataFramesMeta <span class="co"># packages for working with tabular data</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add StatsBase, <span class="bu">LinearAlgebra</span> <span class="co"># a bunch of standard statistics and basic linear algebra tooling</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add SpectralInference <span class="co"># My package working  for working with SVD decompositions of datasets</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add NewickTree <span class="co"># barebones package for working with newick style phylogenetic trees.</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add NeighborJoining <span class="co"># My package implementing basic neighborjoining in julia</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add Muon <span class="co"># julia interface for working with h5ad and h5mu file (useful files for storing matrix data with associated metadata)</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add HypothesisTests, MultipleTesting <span class="co"># standard statistical tests and multiple testing corrections</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add StatsPlots <span class="co"># lighter weight plotting package, concise syntax for plotting</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add CairoMakie <span class="co"># part of the https://docs.makie.org/stable/ ecosystem for plotting. in active development and starting to get more advanced than StatsPlots, can make prettier plots, needs a bit more code</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add LaTeXStrings <span class="co"># for adding latex captions and labels to plots</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="co"># I use these intermittently/less, but are still worth the mention</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add UMAP <span class="co"># umap dimension reduction of large datasets</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add Symbolics <span class="co"># symbolic algebra in Julia</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add MLJ <span class="co"># analog of scikit-learn, enables access to a whole bunch of standard machine learning models</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add Flux <span class="co"># or Lux # basic deep learning toolkits in Julia</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add SciML <span class="co"># differential equation solving and simulation</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>(test_proj) pkg<span class="op">&gt;</span> add Pluto <span class="co"># reactive notebooks, similar to jupyter notebooks but cells automatically re-compute, It's really useful for creating interactive dashboards for exploring small datasets</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>After installing the packages I want at the moment to start with</p>
 <pre class="julia-pkg"><code>add CSV, DataFramesMeta, StatsBase, StatsPlots</code></pre>
 <p>So, I will create a notebook</p>
@@ -405,66 +484,80 @@ date: today
 ---</code></pre>
 <p>This will be used by quarto later when rendering as a static document.</p>
 <p>Below that I create a code cell with</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DrWatson</span> <span class="co"># load DrWatson from global environment</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="pp">@quickactivate</span> <span class="fu">projectdir</span>() <span class="co"># this activates the project environment so we can load the correct packages</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># this way of activation works in the notebooks folder and most subfolders of the project.</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for the activation to work anywhere on the computer explicitly write</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># @quickactivate "test_proj"</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># now we can load our packages from the package environment</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">DataFrames</span>, <span class="bu">StatsPlots</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># I like this as a basic plotting theme</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="op">:</span>default, grid<span class="op">=</span><span class="cn">false</span>, tickdir<span class="op">=:</span>out, label<span class="op">=</span><span class="cn">false</span>)</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># if we had individual files in `src` that we want to use</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co"># include(srcdir("helpers.jl")) </span></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="co"># usually this include line needs to be rerun if the file is adjusted, </span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="co"># using Revise (https://timholy.github.io/Revise.jl/stable/), </span></span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="co"># it might be possible to automatically reload the file on each save.</span></span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="co"># any other package config code</span></span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>ddir <span class="op">=</span> <span class="fu">datadir</span>(<span class="st">"exp_raw"</span>, <span class="st">"initial_dataset"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DrWatson</span> <span class="co"># load DrWatson from global environment</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="pp">@quickactivate</span> <span class="fu">projectdir</span>() <span class="co"># this activates the project environment so we can load the correct packages</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># this way of activation works in the notebooks folder and most subfolders of the project.</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for the activation to work anywhere on the computer explicitly write</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># @quickactivate "test_proj"</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># now we can load our packages from the package environment</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">DataFrames</span>, <span class="bu">StatsPlots</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># I like this as a basic plotting theme</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="op">:</span>default, grid<span class="op">=</span><span class="cn">false</span>, tickdir<span class="op">=:</span>out, label<span class="op">=</span><span class="cn">false</span>)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co"># if we had individual files in `src` that we want to use</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="co"># include(srcdir("helpers.jl")) </span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="co"># usually this include line needs to be rerun if the file is adjusted, </span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="co"># using Revise (https://timholy.github.io/Revise.jl/stable/), </span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="co"># it might be possible to automatically reload the file on each save.</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="co"># any other package config code</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>ddir <span class="op">=</span> <span class="fu">datadir</span>(<span class="st">"exp_raw"</span>, <span class="st">"initial_dataset"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And then I in the cells below I can write any analysis code I want, to read in, analyze, and plot the dataset.</p>
 </section>
 <section id="optional-set-up-quarto-website-of-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="optional-set-up-quarto-website-of-analysis">[Optional] Set up quarto website of analysis</h2>
 <p>To render these notebooks as a html pages hosted as a static website.</p>
 <p>I add a file <code>_quarto.yaml</code> into the <code>notebooks</code> folder, with these contents</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">project</span><span class="kw">:</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> website</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">output-dir</span><span class="kw">:</span><span class="at"> ../docs</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">website</span><span class="kw">:</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="at"> &lt;title of project seen in browser tab&gt;</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">reader-mode</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">sidebar</span><span class="kw">:</span><span class="at"> </span></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span><span class="at"> &lt;title of project seen in side bar of website&gt;,</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">style</span><span class="kw">:</span><span class="at"> </span><span class="st">"docked"</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">contents</span><span class="kw">:</span></span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">href</span><span class="kw">:</span><span class="at"> index.qmd</span><span class="co"> # home page</span></span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">text</span><span class="kw">:</span><span class="at"> Home</span></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> 00_jl_startcleaningdata.ipynb</span></span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co">      # - other_analyses_i_have_done.ipynb</span></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span></span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">html</span><span class="kw">:</span></span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">theme</span><span class="kw">:</span></span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">light</span><span class="kw">:</span><span class="at"> flatly</span></span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">dark</span><span class="kw">:</span><span class="at"> darkly</span></span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">css</span><span class="kw">:</span><span class="at"> styles.css</span></span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">toc</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">project</span><span class="kw">:</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> website</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">output-dir</span><span class="kw">:</span><span class="at"> ../docs</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">website</span><span class="kw">:</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="at"> &lt;title of project seen in browser tab&gt;</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">reader-mode</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">sidebar</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span><span class="at"> &lt;title of project seen in side bar of website&gt;,</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">style</span><span class="kw">:</span><span class="at"> </span><span class="st">"docked"</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">contents</span><span class="kw">:</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">href</span><span class="kw">:</span><span class="at"> index.qmd</span><span class="co"> # home page</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">text</span><span class="kw">:</span><span class="at"> Home</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> 00_jl_startcleaningdata.ipynb</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="co">      # - other_analyses_i_have_done.ipynb</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a><span class="fu">format</span><span class="kw">:</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">html</span><span class="kw">:</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">theme</span><span class="kw">:</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">light</span><span class="kw">:</span><span class="at"> flatly</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">dark</span><span class="kw">:</span><span class="at"> darkly</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">css</span><span class="kw">:</span><span class="at"> styles.css</span></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">toc</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>I’ll also add a local .gitignore file to the <code>notebooks</code> folder with lines</p>
 <pre><code>/.quarto/
 cpuprof</code></pre>
 <p>For the homepage, <code>notebooks/index.md</code> I’ll usually copy in the contents of <code>README.md</code> then edit from there. It should contain a paragraph describing the project at the least.</p>
 <p>To locally preview the website open a terminal in the <code>notebooks</code> folder either in vscode or externally and enter the command</p>
-<pre><code>quarto preview </code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>As you edit the notebooks, the website will automatically update with the changes.</p>
 <p>When you’re project is finished, the website can be hosted on <a href="https://pages.github.com/">GitHub Pages</a></p>
 <p>See this <a href="https://quarto.org/docs/publishing/github-pages.html">quarto tutorial</a> for setting that up.</p>
+</section>
+<section id="other-tips" class="level2">
+<h2 class="anchored" data-anchor-id="other-tips">Other tips</h2>
+<p>The other common bit of advice I give to people starting with scientific data analysis is to get in the habit of gradually turning your code into packages. This is a process. As you are playing around with the data, your code will inevitably start messy. But, notice when you start copy/pasting chunks of code. Those are the pieces that should probably be functions. So, take the time to make them functions. Once you have a few functions related to a topic, throw them into a new file in the <code>src</code> folder. And then import/include them into your analysis code. This promotes consistancy and reproducibility across your analyses.</p>
+<p>Julia example:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">include</span>(<span class="fu">srcdir</span>(<span class="st">"myfunctionsfor_x.jl"</span>))</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># if revise is loaded (which the julia extension should do automatically)</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># use </span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">includet</span>(<span class="fu">srcdir</span>(<span class="st">"myfunctionsfor_x.jl"</span>))</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># for include&lt;tracked&gt; which will update every time the included file is saved</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Python example:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> path.to.myfunctionsfor_x <span class="im">import</span> myfunction</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>For python</strong>, If your analysis code is in <code>notebooks</code> folder, then create a <code>src</code> folder in there to hold your function files. Python really doesn’t like importing things from sibling folders.</p>
+<p>After you have a few of those files, or the functions have solidified and you are not making any more edits to them, look up how to turn them into a full package.</p>
 
 
 </section>
